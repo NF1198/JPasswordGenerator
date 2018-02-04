@@ -46,6 +46,7 @@ public class PasswordGenerator extends javax.swing.JFrame {
         opts_spec2 = new javax.swing.JCheckBox();
         maxRunSpinner = new javax.swing.JSpinner();
         jLabel2 = new javax.swing.JLabel();
+        noSimilarChars = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Password Generator");
@@ -82,6 +83,9 @@ public class PasswordGenerator extends javax.swing.JFrame {
 
             jLabel2.setText("max run");
 
+            noSimilarChars.setSelected(true);
+            noSimilarChars.setText("no similar chars (i1l, etc.)");
+
             javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
             getContentPane().setLayout(layout);
             layout.setHorizontalGroup(
@@ -91,27 +95,33 @@ public class PasswordGenerator extends javax.swing.JFrame {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(passwordField)
                         .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel1)
-                                .addComponent(jLabel2))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(maxRunSpinner)
-                                .addComponent(lengthSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel2)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(maxRunSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel1)
+                                    .addGap(22, 22, 22)
+                                    .addComponent(lengthSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(generateButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(layout.createSequentialGroup()
-                                    .addComponent(opts_atoz)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(opts_AtoZ)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(opts_0to9)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(opts_spec1)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(opts_spec2)
-                                    .addGap(0, 0, Short.MAX_VALUE)))))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                            .addComponent(opts_spec1)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(opts_spec2))
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(opts_atoz)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(opts_AtoZ)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(opts_0to9)
+                                            .addGap(98, 98, 98))
+                                        .addComponent(noSimilarChars, javax.swing.GroupLayout.Alignment.LEADING))
+                                    .addGap(0, 45, Short.MAX_VALUE))
+                                .addComponent(generateButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addContainerGap())
             );
             layout.setVerticalGroup(
@@ -125,15 +135,19 @@ public class PasswordGenerator extends javax.swing.JFrame {
                         .addComponent(jLabel1)
                         .addComponent(opts_atoz)
                         .addComponent(opts_AtoZ)
-                        .addComponent(opts_0to9)
-                        .addComponent(opts_spec1)
-                        .addComponent(opts_spec2))
+                        .addComponent(opts_0to9))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(opts_spec2)
+                        .addComponent(opts_spec1))
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(noSimilarChars)
+                    .addGap(15, 15, 15)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(maxRunSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel2)
                         .addComponent(generateButton))
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addContainerGap(25, Short.MAX_VALUE))
             );
 
             pack();
@@ -142,19 +156,23 @@ public class PasswordGenerator extends javax.swing.JFrame {
     private void generateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateButtonActionPerformed
         Random rand = new SecureRandom();
         final String atoz = "abcdefghijklmnopqrstuvwxyz";
+        final String atoz_safe = "abcdefghjkmnpqrstuvwxyz";
         final String AtoZ = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        final String AtoZ_safe = "ABCDEFGHJKLMNPQRSTUVWXYZ";
         final String _0to9 = "0123456789";
+        final String _0to9_safe = "23456789";
         final String spec1 = "!@#$%^&*";
         final String spec2 = "()_-=+[]{}~|\\";
+        final boolean doSafe = noSimilarChars.isSelected();
         final List<String> opts = new LinkedList<>();
         if (opts_atoz.isSelected()) {
-            opts.add(atoz);
+            opts.add(doSafe ? atoz_safe : atoz);
         }
         if (opts_AtoZ.isSelected()) {
-            opts.add(AtoZ);
+            opts.add(doSafe ? AtoZ_safe : AtoZ);
         }
         if (opts_0to9.isSelected()) {
-            opts.add(_0to9);
+            opts.add(doSafe ? _0to9_safe : _0to9);
         }
         if (opts_spec1.isSelected()) {
             opts.add(spec1);
@@ -162,7 +180,7 @@ public class PasswordGenerator extends javax.swing.JFrame {
         if (opts_spec2.isSelected()) {
             opts.add(spec2);
         }
-        if (opts.size() == 0) {
+        if (opts.isEmpty()) {
             opts_atoz.setSelected(true);
             opts.add(atoz);
         }
@@ -238,6 +256,7 @@ public class PasswordGenerator extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JSpinner lengthSpinner;
     private javax.swing.JSpinner maxRunSpinner;
+    private javax.swing.JCheckBox noSimilarChars;
     private javax.swing.JCheckBox opts_0to9;
     private javax.swing.JCheckBox opts_AtoZ;
     private javax.swing.JCheckBox opts_atoz;
